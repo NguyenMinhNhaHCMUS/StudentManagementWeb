@@ -1,0 +1,89 @@
+-- ============================================================
+-- Lab 03: Tạo Database và các bảng cho hệ thống Quản lý Sinh viên
+-- Sử dụng SHA2_256 cho mã hóa mật khẩu, RSA_2048 cho mã hóa dữ liệu
+-- ============================================================
+
+-- Tạo Database
+USE master;
+GO
+
+IF EXISTS (SELECT name FROM sys.databases WHERE name = N'QLSVNhom')
+BEGIN
+    ALTER DATABASE QLSVNhom SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+    DROP DATABASE QLSVNhom;
+END
+GO
+
+CREATE DATABASE QLSVNhom;
+GO
+
+USE QLSVNhom;
+GO
+
+-- ============================================================
+-- Tạo bảng NHANVIEN
+-- ============================================================
+CREATE TABLE NHANVIEN (
+    MANV        VARCHAR(20)     PRIMARY KEY,
+    HOTEN       NVARCHAR(100)   NOT NULL,
+    EMAIL       VARCHAR(20),
+    LUONG       VARBINARY(MAX),
+    TENDN       NVARCHAR(100)   NOT NULL UNIQUE,
+    MATKHAU     VARBINARY(MAX)  NOT NULL,
+    PUBKEY      VARCHAR(20)
+);
+GO
+
+-- ============================================================
+-- Tạo bảng SINHVIEN
+-- ============================================================
+CREATE TABLE SINHVIEN (
+    MASV        VARCHAR(20),
+    HOTEN       NVARCHAR(100)   NOT NULL,
+    NGAYSINH    DATETIME,
+    DIACHI      NVARCHAR(200),
+    MALOP       NVARCHAR(200),
+    TENDN       NVARCHAR(100)   NOT NULL UNIQUE,
+    MATKHAU     VARBINARY(MAX)  NOT NULL,
+    PRIMARY KEY (MASV, MALOP)
+);
+GO
+
+-- ============================================================
+-- Tạo bảng LOP
+-- ============================================================
+CREATE TABLE LOP (
+    MALOP       VARCHAR(20),
+    TENLOP      NVARCHAR(100)   NOT NULL,
+    MANV        VARCHAR(20),
+    PRIMARY KEY (MALOP, MANV),
+    CONSTRAINT FK_LOP_NHANVIEN FOREIGN KEY (MANV) REFERENCES NHANVIEN(MANV)
+);
+GO
+
+-- ============================================================
+-- Tạo bảng HOCPHAN
+-- ============================================================
+CREATE TABLE HOCPHAN (
+    MAHP        VARCHAR(20)     PRIMARY KEY,
+    TENHP       NVARCHAR(100)   NOT NULL,
+    SOTC        INT
+);
+GO
+
+-- ============================================================
+-- Tạo bảng BANGDIEM
+-- ============================================================
+CREATE TABLE BANGDIEM (
+    MASV        VARCHAR(20),
+    MALOP       NVARCHAR(200),
+    MAHP        VARCHAR(20),
+    DIEMTHI     VARBINARY(MAX),
+    PRIMARY KEY (MASV, MAHP),
+    CONSTRAINT FK_BANGDIEM_SINHVIEN FOREIGN KEY (MASV, MALOP) REFERENCES SINHVIEN(MASV, MALOP),
+    CONSTRAINT FK_BANGDIEM_HOCPHAN  FOREIGN KEY (MAHP) REFERENCES HOCPHAN(MAHP)
+);
+GO
+
+PRINT N'Tạo Database và các bảng thành công!';
+GO
