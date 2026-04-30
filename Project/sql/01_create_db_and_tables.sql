@@ -20,9 +20,17 @@ GO
 USE QLSVNhom;
 GO
 
--- ============================================================
--- Tạo bảng NHANVIEN
--- ============================================================
+CREATE TABLE SINHVIEN (
+    MASV        VARCHAR(20)     PRIMARY KEY,
+    HOTEN       NVARCHAR(100)   NOT NULL,
+    NGAYSINH    DATETIME,
+    DIACHI      NVARCHAR(200),
+    MALOP       VARCHAR(20),
+    TENDN       NVARCHAR(100)   NOT NULL UNIQUE,
+    MATKHAU     VARBINARY(MAX)  NOT NULL,
+);
+GO
+
 CREATE TABLE NHANVIEN (
     MANV        VARCHAR(20)     PRIMARY KEY,
     HOTEN       NVARCHAR(100)   NOT NULL,
@@ -34,36 +42,14 @@ CREATE TABLE NHANVIEN (
 );
 GO
 
--- ============================================================
--- Tạo bảng SINHVIEN
--- ============================================================
-CREATE TABLE SINHVIEN (
-    MASV        VARCHAR(20),
-    HOTEN       NVARCHAR(100)   NOT NULL,
-    NGAYSINH    DATETIME,
-    DIACHI      NVARCHAR(200),
-    MALOP       NVARCHAR(200),
-    TENDN       NVARCHAR(100)   NOT NULL UNIQUE,
-    MATKHAU     VARBINARY(MAX)  NOT NULL,
-    PRIMARY KEY (MASV, MALOP)
-);
-GO
-
--- ============================================================
--- Tạo bảng LOP
--- ============================================================
 CREATE TABLE LOP (
-    MALOP       VARCHAR(20),
+    MALOP       VARCHAR(20)     PRIMARY KEY,
     TENLOP      NVARCHAR(100)   NOT NULL,
     MANV        VARCHAR(20),
-    PRIMARY KEY (MALOP, MANV),
     CONSTRAINT FK_LOP_NHANVIEN FOREIGN KEY (MANV) REFERENCES NHANVIEN(MANV)
 );
 GO
 
--- ============================================================
--- Tạo bảng HOCPHAN
--- ============================================================
 CREATE TABLE HOCPHAN (
     MAHP        VARCHAR(20)     PRIMARY KEY,
     TENHP       NVARCHAR(100)   NOT NULL,
@@ -71,12 +57,9 @@ CREATE TABLE HOCPHAN (
 );
 GO
 
--- ============================================================
--- Tạo bảng BANGDIEM
--- ============================================================
 CREATE TABLE BANGDIEM (
     MASV        VARCHAR(20),
-    MALOP       NVARCHAR(200),
+    MALOP       VARCHAR(20),
     MAHP        VARCHAR(20),
     DIEMTHI     VARBINARY(MAX),
     PRIMARY KEY (MASV, MAHP),

@@ -1,18 +1,11 @@
--- ============================================================
--- Lab 03: Stored Procedures
--- Sử dụng SHA2_256 cho mã hóa mật khẩu, RSA_2048 cho mã hóa dữ liệu
--- ============================================================
-
 USE QLSVNhom;
 GO
 
--- ============================================================
 -- SP_INS_PUBLIC_NHANVIEN
 -- Thêm mới nhân viên:
 --   MATKHAU → SHA2_256
 --   LUONG   → RSA_2048 (tạo asymmetric key với tên = MANV)
 --   PUBKEY  = MANV
--- ============================================================
 CREATE OR ALTER PROCEDURE SP_INS_PUBLIC_NHANVIEN
     @MANV       VARCHAR(20),
     @HOTEN      NVARCHAR(100),
@@ -103,11 +96,11 @@ GO
 -- Thêm sinh viên với mật khẩu được hash SHA2_256
 -- ============================================================
 CREATE OR ALTER PROCEDURE SP_INS_SINHVIEN
-    @MASV       NVARCHAR(20),
+    @MASV       VARCHAR(20),
     @HOTEN      NVARCHAR(100),
     @NGAYSINH   DATETIME,
     @DIACHI     NVARCHAR(200),
-    @MALOP      NVARCHAR(200),
+    @MALOP      VARCHAR(20),
     @TENDN      NVARCHAR(100),
     @MK         NVARCHAR(100)
 AS
@@ -212,7 +205,7 @@ GO
 -- Lấy danh sách sinh viên theo lớp (thông tin cơ bản, không có điểm)
 -- ============================================================
 CREATE OR ALTER PROCEDURE SP_SEL_SINHVIEN_BY_LOP
-    @MALOP      NVARCHAR(200)
+    @MALOP      VARCHAR(20)
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -228,7 +221,7 @@ GO
 -- Xóa sinh viên (cùng điểm liên quan)
 -- ============================================================
 CREATE OR ALTER PROCEDURE SP_DEL_SINHVIEN
-    @MASV       NVARCHAR(20),
+    @MASV       VARCHAR(20),
     @MANV       VARCHAR(20)
 AS
 BEGIN
@@ -257,7 +250,7 @@ GO
 -- Cập nhật thông tin sinh viên
 -- ============================================================
 CREATE OR ALTER PROCEDURE SP_UPDATE_SINHVIEN
-    @MASV       NVARCHAR(20),
+    @MASV       VARCHAR(20),
     @HOTEN      NVARCHAR(100),
     @NGAYSINH   DATETIME,
     @DIACHI     NVARCHAR(200),
@@ -330,7 +323,7 @@ BEGIN
     ELSE
     BEGIN
         -- Lấy MALOP của sinh viên để lưu vào BANGDIEM
-        DECLARE @MALOP NVARCHAR(200);
+        DECLARE @MALOP VARCHAR(20);
         SELECT @MALOP = MALOP FROM SINHVIEN WHERE MASV = @MASV;
 
         INSERT INTO BANGDIEM (MASV, MALOP, MAHP, DIEMTHI)
