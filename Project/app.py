@@ -12,7 +12,7 @@ app.secret_key = 'lab03_dbsec_secret_key_2025'
 # Sửa connection string nếu cần (server name, authentication)
 CONN_STR = (
     'DRIVER={ODBC Driver 17 for SQL Server};'
-    'SERVER=LAPTOP-HI2SLPCM\SQLEXPRESS;'
+    'SERVER=localhost;'
     'DATABASE=QLSVNhom;'
     'Trusted_Connection=yes;'
 )
