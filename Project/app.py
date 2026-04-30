@@ -12,7 +12,7 @@ app.secret_key = 'lab03_dbsec_secret_key_2025'
 # Sửa connection string nếu cần (server name, authentication)
 CONN_STR = (
     'DRIVER={ODBC Driver 17 for SQL Server};'
-    'SERVER=localhost;'
+    'SERVER=LAPTOP-HI2SLPCM\SQLEXPRESS;'
     'DATABASE=QLSVNhom;'
     'Trusted_Connection=yes;'
 )
@@ -109,7 +109,13 @@ def classes():
                     conn.commit()
                     flash(f'Thêm lớp {malop} thành công!', 'success')
                 except Exception as e:
-                    flash(f'Lỗi: {str(e)}', 'error')
+                    error_msg = str(e)
+                    if 'PRIMARY KEY' in error_msg or 'duplicate key' in error_msg:
+                        flash('Mã lớp này đã tồn tại trong hệ thống! Vui lòng nhập mã khác.', 'error')
+                    elif 'RAISERROR' in error_msg:
+                        flash('Bạn không có quyền thực hiện thao tác này!', 'error')
+                    else:
+                        flash('Đã xảy ra lỗi khi thao tác với cơ sở dữ liệu!', 'error')
             else:
                 flash('Vui lòng nhập đầy đủ mã lớp và tên lớp!', 'error')
 
@@ -184,7 +190,13 @@ def students(malop):
                     conn.commit()
                     flash(f'Thêm sinh viên {masv} thành công!', 'success')
                 except Exception as e:
-                    flash(f'Lỗi: {str(e)}', 'error')
+                    error_msg = str(e)
+                    if 'PRIMARY KEY' in error_msg or 'duplicate key' in error_msg:
+                        flash('Mã lớp này đã tồn tại trong hệ thống! Vui lòng nhập mã khác.', 'error')
+                    elif 'RAISERROR' in error_msg:
+                        flash('Bạn không có quyền thực hiện thao tác này!', 'error')
+                    else:
+                        flash('Đã xảy ra lỗi khi thao tác với cơ sở dữ liệu!', 'error')
             else:
                 flash('Vui lòng nhập đầy đủ thông tin bắt buộc!', 'error')
 
