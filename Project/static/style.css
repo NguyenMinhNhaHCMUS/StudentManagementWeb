@@ -372,6 +372,11 @@ select.form-control {
     padding-right: 2rem;
 }
 
+select.form-control option {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
 .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
