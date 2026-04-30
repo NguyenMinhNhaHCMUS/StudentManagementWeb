@@ -156,7 +156,7 @@ BEGIN
 
     -- Xóa điểm của sinh viên thuộc lớp
     DELETE BD FROM BANGDIEM BD
-    INNER JOIN SINHVIEN SV ON BD.MASV = SV.MASV AND BD.MALOP = SV.MALOP
+    INNER JOIN SINHVIEN SV ON BD.MASV = SV.MASV
     WHERE SV.MALOP = @MALOP;
 
     -- Xóa sinh viên thuộc lớp
@@ -322,12 +322,8 @@ BEGIN
     END
     ELSE
     BEGIN
-        -- Lấy MALOP của sinh viên để lưu vào BANGDIEM
-        DECLARE @MALOP VARCHAR(20);
-        SELECT @MALOP = MALOP FROM SINHVIEN WHERE MASV = @MASV;
-
-        INSERT INTO BANGDIEM (MASV, MALOP, MAHP, DIEMTHI)
-        VALUES (@MASV, @MALOP, @MAHP, @DIEM_ENCRYPTED);
+        INSERT INTO BANGDIEM (MASV, MAHP, DIEMTHI)
+        VALUES (@MASV, @MAHP, @DIEM_ENCRYPTED);
     END
 
     PRINT N'Nhập điểm thành công!';
